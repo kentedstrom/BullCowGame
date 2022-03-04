@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include "HiddenWordList.h"
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
@@ -7,6 +8,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 
     SetupGame();
 
+    PrintLine(TEXT("The number of possible words is %i"), Words.Num());
     PrintLine(FString::Printf(TEXT("The HiddenWord is: %s. \n It is %i characters long"), *HiddenWord, HiddenWord.Len()));
 }
 
@@ -100,9 +102,10 @@ bool  UBullCowCartridge::IsIsogram(FString Guess) const {
             }
         }
     }
+    // return true that it is an isogram
     return true;
 
-    //if repeating characters, return false otherwise true
+    
 }
 
     
