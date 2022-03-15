@@ -6,10 +6,13 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
 
+    Isograms = GetValidWords(Words);
     SetupGame();
 
-    PrintLine(TEXT("The number of possible words is %i"), Words.Num());
+  //  PrintLine(TEXT("The number of possible words is %i"), Words.Num());
+   // PrintLine(TEXT("The number of valid words is %i"), GetValidWords(Words).Num());
     PrintLine(FString::Printf(TEXT("The HiddenWord is: %s. \n It is %i characters long"), *HiddenWord, HiddenWord.Len()));
+ 
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -32,7 +35,7 @@ void UBullCowCartridge::EndGame() {
 void UBullCowCartridge::SetupGame() 
 {
     PrintLine(TEXT("Hi There! Welcome to Bull Cows."));
-    HiddenWord = TEXT("cake");
+    HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num() - 1)];
     Lives = HiddenWord.Len();
     bGameOver = false;
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len()); 
@@ -42,7 +45,7 @@ void UBullCowCartridge::SetupGame()
     const TCHAR HW[] = TEXT("cakes");
 }
 
-void UBullCowCartridge::ProcessGuess(FString Guess)
+void UBullCowCartridge::ProcessGuess(const FString& Guess)
 {
 
     //If guess is correct
@@ -90,7 +93,7 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
       PrintLine(TEXT("Guess again, you have %i lives left"), Lives);
     }
 
-bool  UBullCowCartridge::IsIsogram(FString Guess) const {
+bool  UBullCowCartridge::IsIsogram(const FString& Guess) const {
 
     //break into char array
 
@@ -107,6 +110,22 @@ bool  UBullCowCartridge::IsIsogram(FString Guess) const {
 
     
 }
+TArray<FString>  UBullCowCartridge::GetValidWords(const TArray<FString>& Words) const  {
+    TArray<FString> ValidWords;
+    for (FString CurrentWord : Words) {
+
+
+        if (CurrentWord.Len() >= 4 && CurrentWord.Len() <= 8 && IsIsogram(CurrentWord)) {
+            //PrintLine(TEXT("%s"), *Words[Index]);
+            ValidWords.Emplace(CurrentWord);
+        }
+    }
+    return ValidWords;
+}
+  
+  
+
+
 
     
 
